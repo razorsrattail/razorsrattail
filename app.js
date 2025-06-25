@@ -67,22 +67,22 @@ class App{
 	}
 	
     setEnvironment(){
-    const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-    pmremGenerator.compileEquirectangularShader();
+        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
+        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
+        
+        const self = this;
+        
+        loader.load( './assets/hdr/venice_sunset_1k.hdr', ( texture ) => {
+          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+          pmremGenerator.dispose();
 
-    loader.load('./assets/hdr/pond_bridge_night_1k.hdr', (texture) => {
-        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+          self.scene.environment = envMap;
 
-        this.scene.environment = envMap;   // for lighting
-        this.scene.background = envMap;    // for visible background 🌌
-
-        pmremGenerator.dispose();
-        texture.dispose();
-    }, undefined, (err) => {
-        console.error('❌ An error occurred setting the environment:', err);
-    });
-}
+        }, undefined, (err)=>{
+            console.error( 'An error occurred setting the environment');
+        } );
+    }
     
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
