@@ -99,18 +99,21 @@ class App {
             self.scene.add(college);
 
             college.traverse(function (child) {
-                if (child.isMesh) {
-                    if (child.name.indexOf("PROXY") != -1) {
-                        child.material.visible = false;
-                        self.proxy = child;
-                    } else if (child.material.name.indexOf('Glass') != -1) {
-                        child.material.opacity = 0.1;
-                        child.material.transparent = true;
-                    } else {
-                        child.material.color.set('#FFCCE5');
-                    }
-                }
-            });
+    if (child.isMesh){
+        if (child.name.indexOf("PROXY")!=-1){
+            child.material.visible = false;
+            self.proxy = child;
+        } else if (child.material.name.indexOf('Glass')!=-1){
+            child.material.opacity = 0.1;
+            child.material.transparent = true;
+        } else if (child.material.name.toLowerCase().includes("sky")) {
+            child.visible = false;
+        } else {
+            // Set walls or other mesh materials to #FFCCE5
+            child.material.color = new THREE.Color('#FFCCE5');
+        }
+    }
+});
 
             const door1 = college.getObjectByName("LobbyShop_Door__1_");
             const door2 = college.getObjectByName("LobbyShop_Door__2_");
