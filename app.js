@@ -77,7 +77,7 @@ this.scene.add(sun);
         
         const self = this;
         
-        loader.load( './assets/hdr/pond_bridge_night_2k.exr', ( texture ) => {
+        loader.load( './assets/hdr/pond_bridge_night_2k.hdr', ( texture ) => {
           const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
           pmremGenerator.dispose();
 
