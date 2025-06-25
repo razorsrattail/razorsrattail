@@ -121,7 +121,7 @@ class App{
 
             // Apply vibrant pink material
             child.material = new THREE.MeshStandardMaterial({
-                color: 0xDB25CF, // or new THREE.Color('#DB25CF')
+                color: #DB25CF, // or new THREE.Color('#DB25CF')
                 metalness: 0.1,
                 roughness: 0.8
             });
