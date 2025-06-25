@@ -66,24 +66,30 @@ class App{
             });
 	}
 	
-    setEnvironment(){
-        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
-        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        pmremGenerator.compileEquirectangularShader();
-        
-        const self = this;
-        
-        loader.load( './assets/hdr/venice_sunset_1k.hdr', ( texture ) => {
-          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
-          pmremGenerator.dispose();
+   setEnvironment() {
+    const loader = new RGBELoader().setPath(this.assetsPath);
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    pmremGenerator.compileEquirectangularShader();
 
-          self.scene.environment = envMap;
+    loader.load('night_bridge_1k.hdr', (texture) => {
+        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
-        }, undefined, (err)=>{
-            console.error( 'An error occurred setting the environment');
-        } );
-    }
-    
+        this.scene.background = envMap;    // Show HDR as skybox
+        this.scene.environment = envMap;  // Use HDR for lighting
+
+        texture.dispose();
+        pmremGenerator.dispose();
+
+        console.log("✅ HDR environment 'night_bridge_1k.hdr' loaded successfully");
+    }, undefined, (err) => {
+        console.error("❌ Failed to load HDR environment:", err);
+    });
+
+    // Optional: Add a backup directional light in case HDR is too dim
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7.5);
+    this.scene.add(directionalLight);
+}
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
@@ -117,14 +123,9 @@ class App{
 						}else if (child.material.name.indexOf('Glass')!=-1){
                             child.material.opacity = 0.1;
                             child.material.transparent = true;
-                        }else if (child.material.name.indexOf("SkyBox")!=-1){
-                            const mat1 = child.material;
-                            const mat2 = new THREE.MeshBasicMaterial({map: mat1.map});
-                            child.material = mat2;
-                            mat1.dispose();
-                        }
-					}
-				});
+                       }else if (child.material.name.toLowerCase().includes("sky")){
+    child.visible = false;
+}
                        
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
