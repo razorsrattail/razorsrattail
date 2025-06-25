@@ -66,23 +66,20 @@ class App{
             });
 	}
 	
-    setEnvironment(){
-        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
-        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        pmremGenerator.compileEquirectangularShader();
-        
-        const self = this;
-        
-        loader.load( './assets/hdr/night_bridge_1k.hdr', ( texture ) => {
-          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
-          pmremGenerator.dispose();
+    setEnvironment() {
+    const loader = new RGBELoader().setPath(this.assetsPath);
 
-          self.scene.environment = envMap;
+    loader.load('night_bridge_1k.hdr', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
 
-        }, undefined, (err)=>{
-            console.error( 'An error occurred setting the environment');
-        } );
-    }
+        this.scene.background = texture;    // Set the scene's background to the HDR texture
+        this.scene.environment = texture;  // Use HDR for reflective lighting too
+
+        console.log("✅ HDR skybox 'night_bridge_1k.hdr' loaded successfully");
+    }, undefined, (err) => {
+        console.error("❌ Failed to load HDR environment:", err);
+    });
+}
     
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
