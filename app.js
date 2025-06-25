@@ -71,7 +71,7 @@ class App{
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
     pmremGenerator.compileEquirectangularShader();
 
-    loader.load('night_bridge_1k.hdr', (texture) => {
+    loader.load('rogland_clear_night_1k.hdr', (texture) => {
         const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
         this.scene.background = envMap;    // Show HDR as skybox
@@ -80,7 +80,7 @@ class App{
         texture.dispose();
         pmremGenerator.dispose();
 
-        console.log("✅ HDR environment 'night_bridge_1k.hdr' loaded successfully");
+        console.log("✅ HDR environment 'rogland_clear_night_1k.hdr' loaded successfully");
     }, undefined, (err) => {
         console.error("❌ Failed to load HDR environment:", err);
     });
