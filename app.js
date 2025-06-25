@@ -68,7 +68,7 @@ class App {
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('pond_bridge_night_1k.hdr', (texture) => {
+		loader.load('rogland_clear_night_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			this.scene.environment = envMap;
 			this.scene.background = envMap;
