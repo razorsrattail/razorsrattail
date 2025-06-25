@@ -66,22 +66,21 @@ class App{
             });
 	}
 	
-    setEnvironment(){
+    setEnvironment() {
     const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
     pmremGenerator.compileEquirectangularShader();
 
     loader.load('./assets/hdr/pond_bridge_night_1k.hdr', (texture) => {
         const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-        pmremGenerator.dispose();
 
         this.scene.environment = envMap;
-        this.scene.background = envMap; // 👈 Add this line!
+        this.scene.background = envMap; // ✅ makes HDR show as background
 
         texture.dispose();
-        console.log("🌌 HDRI loaded and set as background.");
+        pmremGenerator.dispose();
     }, undefined, (err) => {
-        console.error('❌ Failed to load HDRI:', err);
+        console.error('❌ HDR load failed:', err);
     });
 }
     resize(){
@@ -111,33 +110,23 @@ class App{
 				
 				college.traverse(function (child) {
     if (child.isMesh) {
-        // Make glass transparent
-        if (child.material.name.indexOf('Glass') !== -1) {
+        if (child.name.includes("Wall")) {  // Replace with actual wall name
+            child.material = new THREE.MeshStandardMaterial({ color: "#BC8F8F" });
+        }
+        if (child.name.includes("PROXY")) {
+            child.material.visible = false;
+            self.proxy = child;
+        } else if (child.material.name.includes('Glass')) {
             child.material.opacity = 0.1;
             child.material.transparent = true;
-        }
-
-        // Example: change wall color if name matches
-        if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
-            child.material.color.set('#FFBAED'); // dark brown (can use any hex code or color name)
-        }
-
-        // Optional: fix SkyBox
-        if (child.material.name.indexOf("SkyBox") !== -1) {
+        } else if (child.material.name.includes("SkyBox")) {
             const mat1 = child.material;
             const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
             child.material = mat2;
             mat1.dispose();
         }
-
-        // Hide proxy
-        if (child.name.indexOf("PROXY") !== -1) {
-            child.material.visible = false;
-            self.proxy = child;
-        }
     }
-});
-                       
+});                
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
                 const pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
