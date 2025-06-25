@@ -64,18 +64,31 @@ class App {
 	}
 
 	setEnvironment() {
-		const loader = new RGBELoader().setPath(this.assetsPath);
-		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-		pmremGenerator.compileEquirectangularShader();
+    const loader = new RGBELoader().setPath(this.assetsPath);
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    pmremGenerator.compileEquirectangularShader();
 
-		loader.load('rogland_clear_night_1k.hdr', (texture) => {
-			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-			this.scene.environment = envMap;
-			this.scene.background = envMap;
-			texture.dispose();
-			pmremGenerator.dispose();
-		});
+    loader.load('rogland_clear_night_1k.hdr', (texture) => {
+        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
+        this.scene.environment = envMap;
+        this.scene.background = envMap;
+
+        texture.dispose();
+        pmremGenerator.dispose();
+
+        console.log("✅ HDR environment loaded");
+    }, undefined, (err) => {
+        console.error("❌ Failed to load HDR environment:", err);
+        // Fallback background so screen isn't just black
+        this.scene.background = new THREE.Color(0x111111);
+    });
+
+    // Optional fill light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    directionalLight.position.set(5, 10, 7.5);
+    this.scene.add(directionalLight);
+}
 		const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
 		directionalLight.position.set(5, 10, 7.5);
 		this.scene.add(directionalLight);
