@@ -109,25 +109,31 @@ class App{
                 const college = gltf.scene.children[0];
 				self.scene.add( college );
 				
-				college.traverse((child) => {
+				college.traverse(function (child) {
     if (child.isMesh) {
-        // Target mesh by name or material name — customize this check as needed
+        // Make glass transparent
+        if (child.material.name.indexOf('Glass') !== -1) {
+            child.material.opacity = 0.1;
+            child.material.transparent = true;
+        }
+
+        // Example: change wall color if name matches
         if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
-            // Optional: remove texture if present
-            if (child.material.map) {
-                child.material.map.dispose();
-                child.material.map = null;
-            }
+            child.material.color.set('#DB25CF'); // dark brown (can use any hex code or color name)
+        }
 
-            // Apply vibrant pink material
-            child.material = new THREE.MeshStandardMaterial({
-                color: #DB25CF, // or new THREE.Color('#DB25CF')
-                metalness: 0.1,
-                roughness: 0.8
-            });
-            child.material.needsUpdate = true;
+        // Optional: fix SkyBox
+        if (child.material.name.indexOf("SkyBox") !== -1) {
+            const mat1 = child.material;
+            const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
+            child.material = mat2;
+            mat1.dispose();
+        }
 
-            console.log(`🎨 Wall recolored: ${child.name}`);
+        // Hide proxy
+        if (child.name.indexOf("PROXY") !== -1) {
+            child.material.visible = false;
+            self.proxy = child;
         }
     }
 });
