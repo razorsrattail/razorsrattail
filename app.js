@@ -67,22 +67,22 @@ class App{
 	}
 	
     setEnvironment(){
-    const loader = new RGBELoader().setDataType(THREE.UnsignedByteType).setPath('./assets/hdr/');
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-    pmremGenerator.compileEquirectangularShader();
+        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
+        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
+        
+        const self = this;
+        
+        loader.load( './assets/hdr/venice_sunset_1k.hdr', ( texture ) => {
+          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+          pmremGenerator.dispose();
 
-    loader.load('night_bridge_1k.hdr', (texture) => {
-        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-        pmremGenerator.dispose();
+          self.scene.environment = envMap;
 
-        this.scene.environment = envMap;
-        this.scene.background = envMap;
-
-        console.log("✅ HDR loaded: night_bridge_1k.hdr");
-    }, undefined, (err) => {
-        console.error("❌ HDR load failed:", err);
-    });
-}
+        }, undefined, (err)=>{
+            console.error( 'An error occurred setting the environment');
+        } );
+    }
     
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -109,21 +109,20 @@ class App{
                 const college = gltf.scene.children[0];
 				self.scene.add( college );
 				
-				ccollege.traverse(function (child) {
-					if (child.isMesh){
-						if (child.name.indexOf("PROXY") !== -1){
+				college.traverse(function (child) {
+    				if (child.isMesh){
+						if (child.name.indexOf("PROXY")!=-1){
 							child.material.visible = false;
 							self.proxy = child;
-						}else if (child.material.name.indexOf('Glass') !== -1){
-							child.material.opacity = 0.1;
-							child.material.transparent = true;
-						}else if (child.material.name.indexOf("SkyBox") !== -1){
-							child.material.dispose();
-							child.material = new THREE.MeshBasicMaterial({
-								color: 0x000000, // fallback black (will be hidden by HDR)
-								side: THREE.BackSide
-							});
-						}
+						}else if (child.material.name.indexOf('Glass')!=-1){
+                            child.material.opacity = 0.1;
+                            child.material.transparent = true;
+                        }else if (child.material.name.indexOf("SkyBox")!=-1){
+                            const mat1 = child.material;
+                            const mat2 = new THREE.MeshBasicMaterial({map: mat1.map});
+                            child.material = mat2;
+                            mat1.dispose();
+                        }
 					}
 				});
                        
