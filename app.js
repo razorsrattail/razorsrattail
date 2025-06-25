@@ -66,19 +66,22 @@ class App{
             });
 	}
 	
-    setEnvironment() {
-    const loader = new RGBELoader().setPath(this.assetsPath);
+    setEnvironment(){
+    const loader = new RGBELoader().setDataType(THREE.UnsignedByteType).setPath('./assets/hdr/');
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    pmremGenerator.compileEquirectangularShader();
 
     loader.load('night_bridge_1k.hdr', (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
+        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        pmremGenerator.dispose();
 
-        this.scene.background = texture;    // Set the scene's background to the HDR texture
-        this.scene.environment = texture;  // Use HDR for reflective lighting too
+        this.scene.environment = envMap;
+        this.scene.background = envMap;
 
-        console.log("✅ HDR skybox 'night_bridge_1k.hdr' loaded successfully");
+        console.log("✅ HDR loaded: night_bridge_1k.hdr");
     }, undefined, (err) => {
-        console.error("❌ Failed to load HDR environment:", err);
-    });
+        console.error("❌ HDR load failed:", err);
+    });
 }
     
     resize(){
@@ -107,21 +110,16 @@ class App{
 				self.scene.add( college );
 				
 				college.traverse(function (child) {
-    				if (child.isMesh){
-						if (child.name.indexOf("PROXY")!=-1){
-							child.material.visible = false;
-							self.proxy = child;
-						}else if (child.material.name.indexOf('Glass')!=-1){
-                            child.material.opacity = 0.1;
-                            child.material.transparent = true;
-                        }else if (child.material.name.indexOf("SkyBox")!=-1){
-                            const mat1 = child.material;
-                            const mat2 = new THREE.MeshBasicMaterial({map: mat1.map});
-                            child.material = mat2;
-                            mat1.dispose();
-                        }
-					}
-				});
+    if (child.isMesh){
+        if (child.name.indexOf("PROXY") != -1) {
+            // ...
+        } else if (child.material.name.indexOf('Glass') != -1) {
+            // ...
+        } else if (child.material.name.toLowerCase().includes("sky")) {
+            child.visible = false; // ✅ hide baked-in skybox mesh
+        }
+    }
+});
                        
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
