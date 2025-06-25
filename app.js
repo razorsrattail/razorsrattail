@@ -66,21 +66,23 @@ class App{
             });
 	}
 	
-   setEnvironment() {
-    const loader = new RGBELoader().setPath(this.assetsPath);
+    setEnvironment(){
+        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
+        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
+        
+        const self = this;
+        
+        loader.load( './assets/hdr/venice_sunset_1k.hdr', ( texture ) => {
+          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+          pmremGenerator.dispose();
 
-    loader.load('night_bridge_2k.hdr', (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
+          self.scene.environment = envMap;
 
-        this.scene.background = texture;    // Set the scene's background to the HDR texture
-        this.scene.environment = texture;  // Use HDR for reflective lighting too
-
-        console.log("✅ HDR skybox 'night_bridge_2k.hdr' loaded successfully");
-    }, undefined, (err) => {
-        console.error("❌ Failed to load HDR environment:", err);
-    });
-}
-    
+        }, undefined, (err)=>{
+            console.error( 'An error occurred setting the environment');
+        } );
+    }
     
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -108,22 +110,21 @@ class App{
 				self.scene.add( college );
 				
 				college.traverse(function (child) {
-    if (child.isMesh) {
-        if (child.name.indexOf("PROXY") !== -1) {
-            child.material.visible = false;
-            self.proxy = child;
-        } else if (child.material.name.indexOf("Glass") !== -1) {
-            child.material.opacity = 0.1;
-            child.material.transparent = true;
-        } else if (child.material.name.indexOf("SkyBox") !== -1) {
-            child.material.dispose();
-            child.material = new THREE.MeshBasicMaterial({
-                color: 0x000000, // this won't show up if HDR is working
-                side: THREE.BackSide // render inside-facing
-            });
-        }
-    }
-});
+    				if (child.isMesh){
+						if (child.name.indexOf("PROXY")!=-1){
+							child.material.visible = false;
+							self.proxy = child;
+						}else if (child.material.name.indexOf('Glass')!=-1){
+                            child.material.opacity = 0.1;
+                            child.material.transparent = true;
+                        }else if (child.material.name.indexOf("SkyBox")!=-1){
+                            const mat1 = child.material;
+                            const mat2 = new THREE.MeshBasicMaterial({map: mat1.map});
+                            child.material = mat2;
+                            mat1.dispose();
+                        }
+					}
+				});
                        
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
