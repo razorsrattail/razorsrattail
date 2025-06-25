@@ -119,7 +119,7 @@ class App{
 
         // Example: change wall color if name matches
         if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
-            child.material.color.set('#8B4513'); // dark brown (can use any hex code or color name)
+            child.material.color.set('#FFC0CB'); // dark brown (can use any hex code or color name)
         }
 
         // Optional: fix SkyBox
