@@ -10,50 +10,47 @@
 			overflow: hidden;
 			font-family: 'Courier New', monospace;
 		}
-
 		canvas {
 			display: block;
-		}
-
-		#startButton {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			font-size: 24px;
-			padding: 15px 30px;
-			background-color: #111111;
-			color: #00ffcc;
-			font-family: 'Courier New', monospace;
-			border: 2px solid #00ffcc;
-			border-radius: 10px;
-			cursor: pointer;
-			z-index: 10;
-		}
-
-		video#bgVideo {
-			position: fixed;
-			right: 0;
-			bottom: 0;
-			min-width: 100%;
-			min-height: 100%;
-			z-index: -1;
-			object-fit: cover;
 		}
 	</style>
 </head>
 <body>
 
-	<!-- 🎬 Video Background (with audio, not muted) -->
-	<video id="bgVideo" autoplay loop playsinline>
+	<!-- 🎬 Background Video -->
+	<video id="bgVideo" autoplay muted loop playsinline style="
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		min-width: 100%;
+		min-height: 100%;
+		z-index: -1;
+		object-fit: cover;
+	">
 		<source src="./assets/bg_video_breaking_bad.mp4" type="video/mp4" />
 		Your browser does not support the video tag.
 	</video>
 
-	<!-- 🎮 Start Button -->
-	<button id="startButton">Start Experience</button>
+	<!-- 🚀 Start Button -->
+	<button id="startButton" style="
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 24px;
+		padding: 15px 30px;
+		background-color: #111111;
+		color: #00ffcc;
+		font-family: 'Courier New', monospace;
+		border: 2px solid #00ffcc;
+		border-radius: 10px;
+		cursor: pointer;
+		z-index: 10;
+	">
+		Start Experience
+	</button>
 
-	<!-- 🚀 Main Script -->
+	<!-- ✅ Main App Script -->
 	<script type="module">
 		import { App } from './app.js';
 
@@ -63,37 +60,25 @@
 		const bgVideo = document.getElementById('bgVideo');
 
 		startButton.addEventListener('click', () => {
-			// Unmute and play video with audio
-			bgVideo.muted = false;
-			bgVideo.volume = 1.0;
-			bgVideo.play().then(() => {
-				console.log("🎬 Video playing with sound");
-			}).catch(err => {
-				console.warn("⚠️ Video play blocked:", err);
-			});
-
-			// Hide button
+			// Hide button and stop video
 			startButton.style.display = 'none';
+			bgVideo.pause();
+			bgVideo.currentTime = 0;
+			bgVideo.style.display = 'none';
 
-			// Hide video after 3 seconds
-			setTimeout(() => {
-				bgVideo.pause();
-				bgVideo.currentTime = 0;
-				bgVideo.style.display = 'none';
-			}, 3000);
-
-			// Launch App
+			// Launch app
 			app = new App();
 
-			// Try to play background music after a moment
+			// Attempt to play music (if loaded in app.js)
 			setTimeout(() => {
 				if (app.sound && !app.sound.isPlaying) {
 					app.sound.play().catch((e) => {
-						console.warn("⚠️ Audio autoplay blocked", e);
+						console.warn("⚠️ Autoplay prevented by browser", e);
 					});
 				}
 			}, 500);
 		});
 	</script>
+
 </body>
 </html>
