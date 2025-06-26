@@ -13,7 +13,7 @@
 		canvas {
 			display: block;
 		}
-		#startButton, #musicToggle {
+		#startButton, #videoSoundButton {
 			position: absolute;
 			left: 50%;
 			transform: translateX(-50%);
@@ -29,7 +29,7 @@
 		#startButton {
 			top: 50%;
 		}
-		#musicToggle {
+		#videoSoundButton {
 			top: calc(50% + 70px);
 		}
 	</style>
@@ -46,55 +46,33 @@
 		z-index: -1;
 		object-fit: cover;
 	">
-		<source src="./assets/bg_video_breaking_bad.mp4" type="video/mp4" />
+		<source src="./assets/video/bg_video_breaking_bad.mp4" type="video/mp4" />
 		Your browser does not support the video tag.
 	</video>
 
 	<!-- ✅ UI Buttons -->
 	<button id="startButton">Start Experience</button>
-	<button id="musicToggle">🔇 Turn Music On</button>
+	<button id="videoSoundButton">🔊 Enable Video Sound</button>
 
-	<!-- ✅ Script -->
 	<script type="module">
 		import { App } from './app.js';
 
 		let app;
-		let musicEnabled = false;
 
-		// Preload music
-		const audio = new Audio('./assets/breaking_bad_main_theme.mp3');
-		audio.loop = true;
-		audio.volume = 1.0;
+		const bgVideo = document.getElementById('bgVideo');
 
-		// Toggle music button logic
-		const musicBtn = document.getElementById('musicToggle');
-		musicBtn.addEventListener('click', () => {
-			if (musicEnabled) {
-				audio.pause();
-				musicEnabled = false;
-				musicBtn.textContent = '🔇 Turn Music On';
-			} else {
-				audio.play().then(() => {
-					musicEnabled = true;
-					musicBtn.textContent = '🔊 Turn Music Off';
-				}).catch((err) => {
-					console.error("❌ Music play failed:", err);
-				});
-			}
+		document.getElementById('videoSoundButton').addEventListener('click', () => {
+			bgVideo.muted = false;
+			bgVideo.play(); // resume with sound
+			document.getElementById('videoSoundButton').style.display = 'none';
 		});
 
-		// Start experience button
 		document.getElementById('startButton').addEventListener('click', () => {
 			document.getElementById('startButton').style.display = 'none';
-			musicBtn.style.display = 'none';
-			document.getElementById('bgVideo').style.display = 'none';
+			document.getElementById('videoSoundButton').style.display = 'none';
+			bgVideo.style.display = 'none';
 
 			app = new App();
-
-			// Optional: play music again when entering scene
-			if (musicEnabled && audio.paused) {
-				audio.play();
-			}
 		});
 	</script>
 </body>
