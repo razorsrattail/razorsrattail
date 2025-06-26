@@ -27,6 +27,8 @@ class App {
 		this.scene = new THREE.Scene();
 this.mixers = [];
 		this.scene.add(this.dolly);
+this.playBackgroundMusic();
+
 const listener = new THREE.AudioListener();
 this.camera.add(listener); // Attach listener to the camera
 
@@ -92,6 +94,21 @@ audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 			this.scene.background = new THREE.Color(0x808080);
 		});
 	}
+
+    playBackgroundMusic() {
+        const listener = new THREE.AudioListener();
+        this.camera.add(listener);
+
+        this.sound = new THREE.Audio(listener);
+        const audioLoader = new THREE.AudioLoader();
+
+        audioLoader.load('./assets/audio/background.mp3', (buffer) => {
+            this.sound.setBuffer(buffer);
+            this.sound.setLoop(true);
+            this.sound.setVolume(0.5);
+            // Don't call .play() yet, autoplay policy blocks it!
+        });
+    }
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
