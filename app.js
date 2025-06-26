@@ -119,9 +119,9 @@ class App {
 			});
 
 			// Add Breaking Bad models
-			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -18), Math.PI);
-			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(-8, 0, -12));
-			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(-10, 0, -12));
+			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, 18), Math.PI);
+			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 8, 12));
+			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 8, 12));
 
 			this.loadingBar.visible = false;
 			this.setupXR();
