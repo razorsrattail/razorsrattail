@@ -28,24 +28,6 @@ class App {
 this.mixers = [];
 this.scene.add(this.dolly);
 
-// 🎵 Set up background music
-const listener = new THREE.AudioListener();
-this.camera.add(listener); // Attach listener to camera
-
-this.sound = new THREE.Audio(listener);
-const audioLoader = new THREE.AudioLoader();
-
-audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
-    this.sound.setBuffer(buffer);
-    this.sound.setLoop(true);     // Loop the music
-    this.sound.setVolume(1.0);    // Full volume
-    this.sound.play();            // Start playback
-    console.log("✅ Music playing");
-}, undefined, (err) => {
-    console.error("❌ Failed to load audio", err);
-});
-
-
 		const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
 		this.scene.add(ambient);
 
@@ -97,24 +79,6 @@ audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
 			this.scene.background = new THREE.Color(0x808080);
 		});
 	}
-
-   playBackgroundMusic() {
-		const listener = new THREE.AudioListener();
-		this.camera.add(listener);
-
-		this.sound = new THREE.Audio(listener);
-		const audioLoader = new THREE.AudioLoader();
-
-		audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
-			this.sound.setBuffer(buffer);
-			this.sound.setLoop(true);
-			this.sound.setVolume(0.5);
-			console.log("🎵 Music loaded");
-		}, undefined, (err) => {
-			console.error("❌ Failed to load audio", err);
-		});
-	}
-}
 
 
 	resize() {
