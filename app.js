@@ -26,16 +26,23 @@ class App {
 
 		this.scene = new THREE.Scene();
 this.mixers = [];
-		this.scene.add(this.dolly);
 this.scene.add(this.dolly);
-this.playBackgroundMusic(); // ✅ just call the method here
 
+// 🎵 Set up background music
+const listener = new THREE.AudioListener();
+this.camera.add(listener); // Attach listener to camera
 
-audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
-	sound.setBuffer(buffer);
-	sound.setLoop(true); // Loop the music
-	sound.setVolume(1.0); // Adjust volume (0.0 – 1.0)
-	sound.play(); // Start playback
+this.sound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();
+
+audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
+    this.sound.setBuffer(buffer);
+    this.sound.setLoop(true);     // Loop the music
+    this.sound.setVolume(1.0);    // Full volume
+    this.sound.play();            // Start playback
+    console.log("✅ Music playing");
+}, undefined, (err) => {
+    console.error("❌ Failed to load audio", err);
 });
 
 
@@ -92,20 +99,21 @@ audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 	}
 
    playBackgroundMusic() {
-	const listener = new THREE.AudioListener();
-	this.camera.add(listener); // Attach listener to the camera
+		const listener = new THREE.AudioListener();
+		this.camera.add(listener);
 
-	this.sound = new THREE.Audio(listener);
-	const audioLoader = new THREE.AudioLoader();
+		this.sound = new THREE.Audio(listener);
+		const audioLoader = new THREE.AudioLoader();
 
-	audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
-		this.sound.setBuffer(buffer);
-		this.sound.setLoop(true);
-		this.sound.setVolume(0.5);
-		console.log("🎵 Music loaded");
-	}, undefined, (err) => {
-		console.error("❌ Failed to load audio", err);
-	});
+		audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
+			this.sound.setBuffer(buffer);
+			this.sound.setLoop(true);
+			this.sound.setVolume(0.5);
+			console.log("🎵 Music loaded");
+		}, undefined, (err) => {
+			console.error("❌ Failed to load audio", err);
+		});
+	}
 }
 
 
