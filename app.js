@@ -164,13 +164,13 @@ const loadExtraModel = (filename, position, rotationY = 0) => {
 };
 
 // Add RV
-loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 5, 5), Math.PI);
+loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(10, 10, 10), Math.PI);
 
 // Add Jesse Pinkman
-loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(-2.5, 0, -2));
+loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(1, 0, 0));
 
 // Add Walter White
-loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(2.5, 0, -2));
+loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(1, 0, -2));
 			},
 			// called while loading is progressing
 			function ( xhr ) {
