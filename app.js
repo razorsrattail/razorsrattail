@@ -62,21 +62,23 @@ class App {
 			});
 	}
 
-	// ✅ HDR sky environment (night sky)
 	setEnvironment() {
-    const loader = new RGBELoader().setPath(this.assetsPath);
+		const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
+		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+		pmremGenerator.compileEquirectangularShader();
 
-    loader.load('bambanani_sunset_1k.hdr', (texture) => {
-        texture.mapping = THREE.EquirectangularReflectionMapping;
+		loader.load('./assets/hdr/bambanani_sunset_1k.hdr', (texture) => {
+			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+			pmremGenerator.dispose();
+			this.scene.environment = envMap;
+			this.scene.background = envMap;
+			texture.dispose();
+		}, undefined, (err) => {
+			console.error('❌ Failed to load HDRI:', err);
+			this.scene.background = new THREE.Color(0x808080);
+		});
+	}
 
-        this.scene.background = texture;    // Set the scene's background to the HDR texture
-        this.scene.environment = null;  // Use HDR for reflective lighting too
-
-        console.log("✅ HDR skybox 'bambanani_sunset_1k.hdr' loaded successfully");
-    }, undefined, (err) => {
-        console.error("❌ Failed to load HDR environment:", err);
-    });
-}
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -119,8 +121,8 @@ class App {
 
 			// Add Breaking Bad models
 			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -18), Math.PI);
-			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0,  12));
-			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, 12));
+			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(16, 0,  -12));
+			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(19, 0, -12));
 
 			this.loadingBar.visible = false;
 			this.setupXR();
