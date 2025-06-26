@@ -70,7 +70,7 @@ this.playBackgroundMusic();
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('./assets/hdr/bambanani_sunset_1k.hdr', (texture) => {
+		loader.load('./assets/bambanani_sunset_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			pmremGenerator.dispose();
 			this.scene.environment = envMap;
