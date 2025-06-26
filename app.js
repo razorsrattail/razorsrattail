@@ -89,7 +89,7 @@ playBackgroundMusic() {
 	this.sound = new THREE.Audio(listener);
 	const audioLoader = new THREE.AudioLoader();
 
-	audioLoader.load('./assets/audio/Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
+	audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
 		this.sound.setBuffer(buffer);
 		this.sound.setLoop(true);
 		this.sound.setVolume(1.0);
