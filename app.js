@@ -114,20 +114,25 @@ class App{
 				self.scene.add( college );
 				
 				college.traverse(function (child) {
-    college.traverse(function (child) {
     if (child.isMesh) {
-        // Make glass transparent
+        // Glass transparency
         if (child.material.name.indexOf('Glass') !== -1) {
             child.material.opacity = 0.1;
             child.material.transparent = true;
         }
 
-        // Example: change wall color if name matches
-        if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
-            child.material.color.set('#DAA520'); 
+        // 🌟 Apply wall color override
+        if (
+            child.name.toLowerCase().includes("wall") ||
+            child.material.name.toLowerCase().includes("wall")
+        ) {
+            child.material.color.set('#DAA520');      // GoldenRod
+            child.material.map = null;                // Remove any texture
+            child.material.needsUpdate = true;
+            console.log(`✅ Wall colored: ${child.name}`);
         }
 
-        // Optional: fix SkyBox
+        // Skybox fix
         if (child.material.name.indexOf("SkyBox") !== -1) {
             const mat1 = child.material;
             const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
@@ -142,7 +147,7 @@ class App{
         }
     }
 });
-                 
+             
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
                 const pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
