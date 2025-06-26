@@ -66,7 +66,7 @@ class App{
             });
 	}
 	
-    setEnvironment(){
+     setEnvironment(){
     const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
     pmremGenerator.compileEquirectangularShader();
@@ -84,6 +84,7 @@ class App{
         console.error('❌ Failed to load HDRI:', err);
     });
 }
+
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
