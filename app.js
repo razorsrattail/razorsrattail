@@ -70,7 +70,7 @@ this.playBackgroundMusic();
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('bambanani_sunset_1k.hdr'), (texture) => {
+		loader.load('bambanani_sunset_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			pmremGenerator.dispose();
 			this.scene.environment = envMap;
@@ -89,7 +89,7 @@ playBackgroundMusic() {
 	this.sound = new THREE.Audio(listener);
 	const audioLoader = new THREE.AudioLoader();
 
-	audioLoader.load('breaking_bad_main_theme.mp3'), (buffer) => {
+	audioLoader.load('breaking_bad_main_theme.mp3', (buffer) => {
 		this.sound.setBuffer(buffer);
 		this.sound.setLoop(true);
 		this.sound.setVolume(0.5);
