@@ -342,8 +342,6 @@ loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
     }
 
 	render( timestamp, frame ){
-        const dt = this.clock.getDelta();
-        if (this.mixers && this.mixers.length > 0) {
     this.mixers.forEach(mixer => mixer.update(dt));
 }
         if (this.renderer.xr.isPresenting){
