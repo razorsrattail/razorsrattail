@@ -119,13 +119,14 @@ class App {
 			});
 
 			// Add Breaking Bad models
-// BREAKING BAD RV — scale 3x, rotate 180° (facing backwards)
+// RV facing sideways (rotate 90 degrees)
 this.loadExtraModel(
   'BREAKING BAD RV.glb',
   new THREE.Vector3(5, 0, -10),
-  { x: 0, y: Math.PI, z: 0 },
+  { x: 0, y: Math.PI / 2, z: 0 },  // 90° rotation
   { x: 3, y: 3, z: 3 }
 );
+
 
 // JESSE PINKMAN — smaller and rotated a bit
 this.loadExtraModel(
