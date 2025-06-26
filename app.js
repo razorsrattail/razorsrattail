@@ -96,41 +96,45 @@ class App {
 			this.scene.add(college);
 
 			college.traverse((child) => {
-				if (child.isMesh) {
-					if (child.material.name.includes('Glass')) {
-						child.material = child.material.clone();
-						child.material.transparent = true;
-						child.material.opacity = 0.1;
-					}
-					if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
-						child.material = child.material.clone();
-						child.material.color.set('#DAA520'); // your chosen wall color
-					}
-					if (child.material.name.includes("SkyBox")) {
-						const mat = child.material;
-						child.material = new THREE.MeshBasicMaterial({ map: mat.map });
-						mat.dispose();
-					}
-					if (child.name.includes("PROXY")) {
-						child.material.visible = false;
-						this.proxy = child;
-					}
-				}
-			});
+				// Add Breaking Bad models
+const loadExtraModel = (filename, position, rotationY = 0) => {
+    const loader = new GLTFLoader().setPath(self.assetsPath);
+    loader.load(filename, (gltf) => {
+        const model = gltf.scene;
+        model.position.copy(position);
+        model.rotation.y = rotationY;
+        model.scale.set(1, 1, 1); // Adjust if needed
+        self.scene.add(model);
+    }, undefined, (err) => {
+        console.error(❌ Failed to load ${filename}, err);
+    });
+};
 
-			// Add Breaking Bad models
-			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
-			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
-			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
+// Add RV
+loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
 
-			this.loadingBar.visible = false;
-			this.setupXR();
-		}, xhr => {
-			this.loadingBar.progress = xhr.loaded / xhr.total;
-		}, err => {
-			console.error('❌ Error loading college.glb:', err);
-		});
+// Add Jesse Pinkman
+loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0, 9));
+
+// Add Walter White
+loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(2, 0, 9));
+
+			},
+			// called while loading is progressing
+			function ( xhr ) {
+
+				self.loadingBar.progress = (xhr.loaded / xhr.total);
+				
+			},
+			// called when loading has errors
+			function ( error ) {
+
+				console.log( 'An error happened' );
+
+			}
+		);
 	}
+
 
 	loadExtraModel(filename, position, rotationY = 0) {
 		const loader = new GLTFLoader().setPath(this.assetsPath);
