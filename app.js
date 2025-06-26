@@ -123,6 +123,22 @@ class App {
 			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -18), Math.PI);
 			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0,  13));
 			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(4, 0, 13));
+loadExtraModel(filename, position, rotationY = 0) {
+	const loader = new GLTFLoader().setPath(this.assetsPath);
+	loader.load(filename, (gltf) => {
+		const model = gltf.scene;
+		model.position.copy(position);
+		model.rotation.y = rotationY;
+		
+		// 👇 This is the scaling line:
+		model.scale.set(1, 1, 1);  // <--- 🔥 Edit this line to scale your characters down
+
+		this.scene.add(model);
+	}, undefined, (err) => {
+		console.error(`❌ Failed to load ${filename}`, err);
+	});
+}
+
 
 			this.loadingBar.visible = false;
 			this.setupXR();
