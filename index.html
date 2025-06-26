@@ -13,7 +13,7 @@
 		canvas {
 			display: block;
 		}
-		#startButton, #videoSoundButton {
+		#startButton, #musicToggle {
 			position: absolute;
 			left: 50%;
 			transform: translateX(-50%);
@@ -29,7 +29,7 @@
 		#startButton {
 			top: 50%;
 		}
-		#videoSoundButton {
+		#musicToggle {
 			top: calc(50% + 70px);
 		}
 	</style>
@@ -52,24 +52,42 @@
 
 	<!-- ✅ UI Buttons -->
 	<button id="startButton">Start Experience</button>
-	<button id="videoSoundButton">🔊 Enable Video Sound</button>
+	<button id="musicToggle">🔇 Turn Video Sound On</button>
 
+	<!-- ✅ Script -->
 	<script type="module">
 		import { App } from './app.js';
 
 		let app;
-
 		const bgVideo = document.getElementById('bgVideo');
+		const musicBtn = document.getElementById('musicToggle');
 
-		document.getElementById('videoSoundButton').addEventListener('click', () => {
-			bgVideo.muted = false;
-			bgVideo.play(); // resume with sound
-			document.getElementById('videoSoundButton').style.display = 'none';
+		// Video sound toggle
+		let videoSoundOn = false;
+
+		musicBtn.addEventListener('click', () => {
+			if (videoSoundOn) {
+				bgVideo.muted = true;
+				videoSoundOn = false;
+				musicBtn.textContent = '🔇 Turn Video Sound On';
+			} else {
+				const playPromise = bgVideo.play(); // Required for unmuting to take effect
+				if (playPromise !== undefined) {
+					playPromise.then(() => {
+						bgVideo.muted = false;
+						videoSoundOn = true;
+						musicBtn.textContent = '🔊 Turn Video Sound Off';
+					}).catch((err) => {
+						console.error("❌ Failed to enable video sound:", err);
+					});
+				}
+			}
 		});
 
+		// Start experience
 		document.getElementById('startButton').addEventListener('click', () => {
 			document.getElementById('startButton').style.display = 'none';
-			document.getElementById('videoSoundButton').style.display = 'none';
+			musicBtn.style.display = 'none';
 			bgVideo.style.display = 'none';
 
 			app = new App();
