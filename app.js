@@ -150,36 +150,46 @@ class App{
 			
                 self.setupXR();
 				// Animation mixers array
-self.mixers = [];
-
+// Add Breaking Bad models
 const loadExtraModel = (filename, position, rotationY = 0) => {
     const loader = new GLTFLoader().setPath(self.assetsPath);
     loader.load(filename, (gltf) => {
         const model = gltf.scene;
         model.position.copy(position);
         model.rotation.y = rotationY;
-        model.scale.set(3, 3, 3); // Adjust scale if needed
+        model.scale.set(3, 3, 3); // Adjust if needed
         self.scene.add(model);
-
-        // If there are animations
-        if (gltf.animations && gltf.animations.length > 0) {
-            const mixer = new THREE.AnimationMixer(model);
-            gltf.animations.forEach((clip) => {
-                mixer.clipAction(clip).play();
-            });
-            self.mixers.push(mixer);
-        }
     }, undefined, (err) => {
-        console.error(`❌ Failed to load ${filename}`, err);
+        console.error(❌ Failed to load ${filename}, err);
     });
 };
 
-// Add Breaking Bad characters
+// Add RV
 loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
+
+// Add Jesse Pinkman
 loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
+
+// Add Walter White
 loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
 
-    
+			},
+			// called while loading is progressing
+			function ( xhr ) {
+
+				self.loadingBar.progress = (xhr.loaded / xhr.total);
+				
+			},
+			// called when loading has errors
+			function ( error ) {
+
+				console.log( 'An error happened' );
+
+			}
+		);
+	}
+
+
     setupXR(){
         this.renderer.xr.enabled = true;
 
