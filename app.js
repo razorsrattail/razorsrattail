@@ -33,10 +33,10 @@ this.camera.add(listener); // Attach listener to the camera
 const sound = new THREE.Audio(listener);
 const audioLoader = new THREE.AudioLoader();
 
-audioLoader.load('./assets/audio/Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
+audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 	sound.setBuffer(buffer);
 	sound.setLoop(true); // Loop the music
-	sound.setVolume(0.5); // Adjust volume (0.0 – 1.0)
+	sound.setVolume(1.0); // Adjust volume (0.0 – 1.0)
 	sound.play(); // Start playback
 });
 
