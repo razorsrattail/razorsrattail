@@ -1,38 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>VR Architectural Walkthrough with WebXR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./css/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./css/favicon/site.webmanifest">
-    <link rel="mask-icon" href="./css/favicon/safari-pinned-tab.svg" color="#E86AE8">
-    <meta name="msapplication-TileColor" content="#E86AE8">
-    <meta name="theme-color" content="#E86AE8">
-    <!-- end favicon -->
-    <link type="text/css" rel="stylesheet" href="./css/common.css">
-    <style>
-        body{
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>VR Gallery</title>
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
 </head>
 <body>
-    <script src="./libs/fas.js"></script>
-<button id="startButton" style="position: absolute; top: 50%; left: 50%; 
-	transform: translate(-50%, -50%); font-size: 24px; padding: 10px 20px; z-index: 10;">
-	Start Experience
-</button>
 
+	<!-- ✅ Start Button UI -->
+	<button id="startButton" style="position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%); font-size: 24px; padding: 10px 20px; z-index: 10;">
+		Start Experience
+	</button>
+
+	<!-- ✅ Main App Script -->
 	<script type="module">
-        import { App } from './app.js';
-        
-		document.addEventListener("DOMContentLoaded", function(){
-			const app = new App();
-			window.app = app;
+		import { App } from './app.js';
+
+		let app;
+
+		document.getElementById('startButton').addEventListener('click', () => {
+			document.getElementById('startButton').style.display = 'none';
+			app = new App();
+
+			// ✅ Delay to ensure the sound buffer is ready
+			setTimeout(() => {
+				if (app.sound && !app.sound.isPlaying) {
+					app.sound.play();
+				}
+			}, 500);
 		});
 	</script>
+
 </body>
 </html>
