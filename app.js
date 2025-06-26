@@ -163,11 +163,7 @@ const loadExtraModel = (filename, position, rotationY = 0, scale = 3) => {
 
         // Setup animation if present
         if (gltf.animations && gltf.animations.length > 0) {
-            const mixer = new THREE.AnimationMixer(model);
-            gltf.animations.forEach((clip) => {
-                mixer.clipAction(clip).play();
-            });
-            mixers.push(mixer);
+            
         }
 
     }, undefined, (err) => {
