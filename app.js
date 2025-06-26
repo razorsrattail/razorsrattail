@@ -114,6 +114,7 @@ class App{
 				self.scene.add( college );
 				
 				college.traverse(function (child) {
+    college.traverse(function (child) {
     if (child.isMesh) {
         // Make glass transparent
         if (child.material.name.indexOf('Glass') !== -1) {
@@ -141,7 +142,7 @@ class App{
         }
     }
 });
-                       
+                 
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
                 const pos = door1.position.clone().sub(door2.position).multiplyScalar(0.5).add(door2.position);
