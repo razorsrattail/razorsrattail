@@ -2,56 +2,23 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>VR Gallery</title>
 	<style>
-		body {
-			margin: 0;
-			overflow: hidden;
-			background-color: black;
-		}
-		canvas {
-			display: block;
-		}
+		body { margin: 0; overflow: hidden; background: #000; }
+		canvas { display: block; }
 	</style>
 </head>
 <body>
 
-	<!-- ✅ Start Button UI -->
-	<button id="startButton" style="
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 24px;
-		padding: 10px 20px;
-		z-index: 10;
-		cursor: pointer;
-	">
-		Start Experience
-	</button>
+<button id="startButton" style="position: absolute; top: 50%; left: 50%;
+	transform: translate(-50%, -50%); font-size: 24px; padding: 10px 20px; z-index: 10;">
+	Start Experience
+</button>
 
-	<!-- ✅ Main App Script -->
-	<script type="module">
-		import { App } from './app.js';
+<script type="module">
+	import { App } from './app.js';
 
-		let app;
+	let app;
 
-		document.getElementById('startButton').addEventListener('click', () => {
-			document.getElementById('startButton').style.display = 'none';
-
-			app = new App();
-
-			// ✅ Try to play sound after a short delay (ensures buffer is ready)
-			setTimeout(() => {
-				if (app.sound && !app.sound.isPlaying) {
-					app.sound.play()
-						.then(() => console.log("🎵 Music started"))
-						.catch(err => console.warn("🔇 Music couldn't play:", err));
-				}
-			}, 1000);
-		});
-	</script>
-
-</body>
-</html>
+	document.getElementById('startButton').addEventListener('click', () => {
+		console.log("✅ Sta
