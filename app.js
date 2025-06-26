@@ -27,13 +27,9 @@ class App {
 		this.scene = new THREE.Scene();
 this.mixers = [];
 		this.scene.add(this.dolly);
-this.playBackgroundMusic();
+this.scene.add(this.dolly);
+this.playBackgroundMusic(); // ✅ just call the method here
 
-const listener = new THREE.AudioListener();
-this.camera.add(listener); // Attach listener to the camera
-
-const sound = new THREE.Audio(listener);
-const audioLoader = new THREE.AudioLoader();
 
 audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 	sound.setBuffer(buffer);
@@ -95,20 +91,23 @@ audioLoader.load('Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 		});
 	}
 
-    playBackgroundMusic() {
-        const listener = new THREE.AudioListener();
-        this.camera.add(listener);
+   playBackgroundMusic() {
+	const listener = new THREE.AudioListener();
+	this.camera.add(listener); // Attach listener to the camera
 
-        this.sound = new THREE.Audio(listener);
-        const audioLoader = new THREE.AudioLoader();
+	this.sound = new THREE.Audio(listener);
+	const audioLoader = new THREE.AudioLoader();
 
-        audioLoader.load('./assets/audio/background.mp3', (buffer) => {
-            this.sound.setBuffer(buffer);
-            this.sound.setLoop(true);
-            this.sound.setVolume(0.5);
-            // Don't call .play() yet, autoplay policy blocks it!
-        });
-    }
+	audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
+		this.sound.setBuffer(buffer);
+		this.sound.setLoop(true);
+		this.sound.setVolume(0.5);
+		console.log("🎵 Music loaded");
+	}, undefined, (err) => {
+		console.error("❌ Failed to load audio", err);
+	});
+}
+
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
