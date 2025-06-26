@@ -163,20 +163,17 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 		model.scale.set(scale.x, scale.y, scale.z);
 		this.scene.add(model);
 
-		// ✅ Play animation if available
+		// 👉 Check and play built-in animations
 		if (gltf.animations && gltf.animations.length > 0) {
 			const mixer = new THREE.AnimationMixer(model);
-			gltf.animations.forEach((clip) => {
-				const action = mixer.clipAction(clip);
-				action.play();
-			});
-			if (!this.mixers) this.mixers = [];
+			gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
 			this.mixers.push(mixer);
 		}
 	}, undefined, (err) => {
 		console.error(`❌ Failed to load ${filename}`, err);
 	});
 }
+
 
 
 	setupXR() {
@@ -295,6 +292,7 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 
 	render(timestamp, frame) {
 	const dt = this.clock.getDelta();
+this.mixers.forEach((mixer) => mixer.update(dt));
 
 	// ✅ Update animation mixers
 	if (this.mixers && this.mixers.length > 0) {
