@@ -158,12 +158,17 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 	const loader = new GLTFLoader().setPath(this.assetsPath);
 	loader.load(filename, (gltf) => {
 		const model = gltf.scene;
-		model.position.copy(position);
-		model.rotation.set(rotation.x, rotation.y, rotation.z);
-		model.scale.set(scale.x, scale.y, scale.z);
-		this.scene.add(model);
 
-		// 👉 Check and play built-in animations
+		// Create a group so transformations don't conflict with animation
+		const group = new THREE.Group();
+		group.add(model);
+
+		group.position.copy(position);
+		group.rotation.set(rotation.x, rotation.y, rotation.z);
+		group.scale.set(scale.x, scale.y, scale.z);
+		this.scene.add(group);
+
+		// ✅ Handle animations if they exist
 		if (gltf.animations && gltf.animations.length > 0) {
 			const mixer = new THREE.AnimationMixer(model);
 			gltf.animations.forEach((clip) => mixer.clipAction(clip).play());
@@ -292,7 +297,10 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 
 	render(timestamp, frame) {
 	const dt = this.clock.getDelta();
-this.mixers.forEach((mixer) => mixer.update(dt));
+if (this.mixers) {
+	this.mixers.forEach((mixer) => mixer.update(dt));
+}
+
 
 	// ✅ Update animation mixers
 	if (this.mixers && this.mixers.length > 0) {
