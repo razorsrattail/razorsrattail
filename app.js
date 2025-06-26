@@ -156,7 +156,7 @@ const loadExtraModel = (filename, position, rotationY = 0) => {
         const model = gltf.scene;
         model.position.copy(position);
         model.rotation.y = rotationY;
-        model.scale.set(3, 3, 3); // Adjust if needed
+        model.scale.set(2, 2, 2); // Adjust if needed
         self.scene.add(model);
     }, undefined, (err) => {
         console.error(`❌ Failed to load ${filename}`, err);
