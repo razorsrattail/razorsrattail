@@ -156,7 +156,7 @@ const loadExtraModel = (filename, position, rotationY = 0) => {
         const model = gltf.scene;
         model.position.copy(position);
         model.rotation.y = rotationY;
-        model.scale.set(2, 2, 2); // Adjust if needed
+        model.scale.set(5, 5, 5); // Adjust if needed
         self.scene.add(model);
     }, undefined, (err) => {
         console.error(`❌ Failed to load ${filename}`, err);
@@ -164,7 +164,7 @@ const loadExtraModel = (filename, position, rotationY = 0) => {
 };
 
 // Add RV
-loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(0, 0, 0), Math.PI);
+loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 5, 5), Math.PI);
 
 // Add Jesse Pinkman
 loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(-2.5, 0, -2));
