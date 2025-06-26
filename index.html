@@ -32,6 +32,26 @@
 		#musicToggle {
 			top: calc(50% + 70px);
 		}
+		#loadingBarContainer {
+			position: absolute;
+			top: 60%;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 300px;
+			height: 20px;
+			border: 2px solid #00ffcc;
+			border-radius: 10px;
+			background-color: #111;
+			overflow: hidden;
+			display: none;
+			z-index: 10;
+		}
+		#loadingBar {
+			width: 0%;
+			height: 100%;
+			background-color: #00ffcc;
+			transition: width 0.2s ease;
+		}
 	</style>
 </head>
 <body>
@@ -54,6 +74,11 @@
 	<button id="startButton">Start Experience</button>
 	<button id="musicToggle">🔇 Turn Video Sound On</button>
 
+	<!-- 🔄 Loading Bar -->
+	<div id="loadingBarContainer">
+		<div id="loadingBar"></div>
+	</div>
+
 	<!-- ✅ Script -->
 	<script type="module">
 		import { App } from './app.js';
@@ -61,10 +86,11 @@
 		let app;
 		const bgVideo = document.getElementById('bgVideo');
 		const musicBtn = document.getElementById('musicToggle');
+		const loadingBar = document.getElementById('loadingBar');
+		const loadingBarContainer = document.getElementById('loadingBarContainer');
 
 		// Video sound toggle
 		let videoSoundOn = false;
-
 		musicBtn.addEventListener('click', () => {
 			if (videoSoundOn) {
 				bgVideo.muted = true;
@@ -94,15 +120,27 @@
 			document.getElementById('startButton').style.display = 'none';
 			musicBtn.style.display = 'none';
 			bgVideo.style.display = 'none';
-			bgVideo.pause(); // stop the video completely
-			bgVideo.muted = true; // ensure no sound leaks
+			bgVideo.pause();
+			bgVideo.muted = true;
+
+			loadingBarContainer.style.display = 'block';
 
 			app = new App();
 
-			// ✅ Start MP3 music for experience
-			backgroundMusic.play().catch((err) => {
-				console.error("❌ Failed to play MP3:", err);
-			});
+			// Simulate progress bar for demo (replace this with real progress updates from App if available)
+			let progress = 0;
+			const interval = setInterval(() => {
+				progress += 1;
+				loadingBar.style.width = progress + '%';
+				if (progress >= 100) {
+					clearInterval(interval);
+					loadingBarContainer.style.display = 'none';
+					// Start MP3 music for experience
+					backgroundMusic.play().catch((err) => {
+						console.error("❌ Failed to play MP3:", err);
+					});
+				}
+			}, 20);
 		});
 	</script>
 </body>
