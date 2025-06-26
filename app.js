@@ -164,7 +164,7 @@ const loadExtraModel = (filename, position, rotationY = 0) => {
 };
 
 // Add RV
-loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
+loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, 10), Math.PI);
 
 // Add Jesse Pinkman
 loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
