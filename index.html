@@ -8,40 +8,28 @@
 		body {
 			margin: 0;
 			overflow: hidden;
+			background-color: black;
 		}
 		canvas {
 			display: block;
-		}
-		video#bg-video {
-			position: absolute;
-			top: 0; left: 0;
-			width: 100vw;
-			height: 100vh;
-			object-fit: cover;
-			z-index: -1;
-		}
-		#startButton {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			font-size: 24px;
-			padding: 10px 20px;
-			z-index: 10;
 		}
 	</style>
 </head>
 <body>
 
-	<!-- ✅ Optional Video Background -->
-	<!-- If you don’t want video, just remove this block -->
-	<video id="bg-video" autoplay loop muted playsinline>
-		<source src="./assets/video/bg.mp4" type="video/mp4">
-		Your browser does not support the video tag.
-	</video>
-
 	<!-- ✅ Start Button UI -->
-	<button id="startButton">Start Experience</button>
+	<button id="startButton" style="
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 24px;
+		padding: 10px 20px;
+		z-index: 10;
+		cursor: pointer;
+	">
+		Start Experience
+	</button>
 
 	<!-- ✅ Main App Script -->
 	<script type="module">
@@ -52,22 +40,16 @@
 		document.getElementById('startButton').addEventListener('click', () => {
 			document.getElementById('startButton').style.display = 'none';
 
-			// If you used a video background and it’s not muted, unmute now
-			const bgVideo = document.getElementById('bg-video');
-			if (bgVideo) bgVideo.muted = false;
-
 			app = new App();
 
-			// Wait a bit to ensure sound is ready
+			// ✅ Try to play sound after a short delay (ensures buffer is ready)
 			setTimeout(() => {
 				if (app.sound && !app.sound.isPlaying) {
-					app.sound.play().then(() => {
-						console.log("🎵 Music playing");
-					}).catch((e) => {
-						console.error("🔇 Music failed:", e);
-					});
+					app.sound.play()
+						.then(() => console.log("🎵 Music started"))
+						.catch(err => console.warn("🔇 Music couldn't play:", err));
 				}
-			}, 500);
+			}, 1000);
 		});
 	</script>
 
