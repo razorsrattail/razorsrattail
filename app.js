@@ -25,7 +25,6 @@ class App {
 		this.camera.add(this.dummyCam);
 
 		this.scene = new THREE.Scene();
-this.mixers = [];
 
 		this.scene.add(this.dolly);
 
@@ -325,25 +324,7 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 						}
 					}
 				});
-				if (!found) {
-					this.boardShown = "";
-					this.ui.visible = false;
-				}
-			}
-		}
-	}
-
-	if (this.immersive !== this.renderer.xr.isPresenting) {
-		this.resize();
-		this.immersive = this.renderer.xr.isPresenting;
-	}
-
-	this.stats.update();
-	this.renderer.render(this.scene, this.camera);
-}
-
-
-
+		
 
 					if (!found) {
 						this.boardShown = "";
