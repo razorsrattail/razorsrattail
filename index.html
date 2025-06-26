@@ -29,16 +29,18 @@
 		let app;
 
 		document.getElementById('startButton').addEventListener('click', () => {
-			document.getElementById('startButton').style.display = 'none';
-			app = new App();
+	document.getElementById('startButton').style.display = 'none';
 
-			// ✅ Delay to ensure the sound buffer is ready
-			setTimeout(() => {
-				if (app.sound && !app.sound.isPlaying) {
-					app.sound.play();
-				}
-			}, 500);
-		});
+	app = new App();
+
+	// Wait a bit to ensure audio is ready
+	setTimeout(() => {
+		if (app.sound && !app.sound.isPlaying) {
+			app.sound.play();
+		}
+	}, 500);
+});
+
 	</script>
 
 </body>
