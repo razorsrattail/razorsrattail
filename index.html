@@ -17,7 +17,7 @@
 <body>
 
 	<!-- 🎬 Video Background -->
-	<video id="bgVideo" autoplay loop playsinline style="
+	<video id="bgVideo" playsinline autoplay muted loop style="
 		position: fixed;
 		right: 0;
 		bottom: 0;
@@ -44,18 +44,10 @@
 
 		document.getElementById('startButton').addEventListener('click', () => {
 			document.getElementById('startButton').style.display = 'none';
-
-			const video = document.getElementById('bgVideo');
-			video.muted = false;
-			video.volume = 1.0;
-			video.play().then(() => {
-				console.log("🎬 Video playing with audio");
-			}).catch((e) => {
-				console.error("❌ Video play error:", e);
-			});
+			document.getElementById('bgVideo').style.display = 'none'; // Hide video when starting
 
 			app = new App();
-			app.playBackgroundMusic(); // ✅ Called immediately after new App()
+			app.playBackgroundMusic(); // 🎵 Attempt to play music
 
 			setTimeout(() => {
 				if (app.sound && !app.sound.isPlaying) {
