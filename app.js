@@ -25,7 +25,7 @@ class App {
 		this.camera.add(this.dummyCam);
 
 		this.scene = new THREE.Scene();
-
+this.mixers = [];
 		this.scene.add(this.dolly);
 
 		const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
