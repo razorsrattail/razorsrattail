@@ -25,23 +25,6 @@ class App {
 		this.camera.add(this.dummyCam);
 
 		this.scene = new THREE.Scene();
-		playBackgroundMusic() {
-	const listener = new THREE.AudioListener();
-	this.camera.add(listener);
-
-	this.sound = new THREE.Audio(listener);
-	const audioLoader = new THREE.AudioLoader();
-
-	audioLoader.load('./assets/audio/theme.mp3', (buffer) => {
-		this.sound.setBuffer(buffer);
-		this.sound.setLoop(true);
-		this.sound.setVolume(0.8);
-		console.log("🎵 Audio loaded");
-	}, undefined, (err) => {
-		console.error("❌ Failed to load audio", err);
-	});
-}
-
 this.mixers = [];
 this.scene.add(this.dolly);
 this.playBackgroundMusic();
@@ -106,7 +89,7 @@ playBackgroundMusic() {
 	this.sound = new THREE.Audio(listener);
 	const audioLoader = new THREE.AudioLoader();
 
-	audioLoader.load('./assets/audio/breaking_bad_main_theme.mp3', (buffer) => {
+	audioLoader.load('./assets/audio/Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
 		this.sound.setBuffer(buffer);
 		this.sound.setLoop(true);
 		this.sound.setVolume(1.0);
