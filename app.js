@@ -113,26 +113,20 @@ class App{
                 const college = gltf.scene.children[0];
 				self.scene.add( college );
 				
-				college.traverse(function (child) {
+college.traverse(function (child) {
     if (child.isMesh) {
-        // Glass transparency
+        // Make glass transparent
         if (child.material.name.indexOf('Glass') !== -1) {
             child.material.opacity = 0.1;
             child.material.transparent = true;
         }
 
-        // 🌟 Apply wall color override
-        if (
-            child.name.toLowerCase().includes("wall") ||
-            child.material.name.toLowerCase().includes("wall")
-        ) {
-            child.material.color.set('#DAA520');      // GoldenRod
-            child.material.map = null;                // Remove any texture
-            child.material.needsUpdate = true;
-            console.log(`✅ Wall colored: ${child.name}`);
+        // Example: change wall color if name matches
+        if (child.name.toLowerCase().includes("wall") || child.material.name.toLowerCase().includes("wall")) {
+            child.material.color.set('#DAA520'); 
         }
 
-        // Skybox fix
+        // Optional: fix SkyBox
         if (child.material.name.indexOf("SkyBox") !== -1) {
             const mat1 = child.material;
             const mat2 = new THREE.MeshBasicMaterial({ map: mat1.map });
@@ -147,6 +141,7 @@ class App{
         }
     }
 });
+      
              
                 const door1 = college.getObjectByName("LobbyShop_Door__1_");
                 const door2 = college.getObjectByName("LobbyShop_Door__2_");
