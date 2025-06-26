@@ -63,21 +63,20 @@ class App {
 	}
 
 	setEnvironment() {
-		const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
-		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-		pmremGenerator.compileEquirectangularShader();
+    const loader = new RGBELoader().setPath(this.assetsPath);
 
-		loader.load('./assets/hdr/bambanani_sunset_1k.hdr', (texture) => {
-			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
-			pmremGenerator.dispose();
-			this.scene.environment = envMap;
-			this.scene.background = envMap;
-			texture.dispose();
-		}, undefined, (err) => {
-			console.error('❌ Failed to load HDRI:', err);
-			this.scene.background = new THREE.Color(0x808080);
-		});
-	}
+    loader.load('bambanani_sunset_1k.hdr', (texture) => {
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+
+        this.scene.background = texture;
+        this.scene.environment = texture;
+
+        console.log("✅ HDRI loaded as skybox and lighting");
+    }, undefined, (err) => {
+        console.error("❌ Failed to load HDRI:", err);
+        this.scene.background = new THREE.Color(0x333333);
+    });
+}
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
