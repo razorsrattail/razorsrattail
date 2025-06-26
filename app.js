@@ -67,22 +67,27 @@ class App{
 	}
 	
     setEnvironment(){
-        const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
-        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
-        pmremGenerator.compileEquirectangularShader();
-        
-        const self = this;
-        
-        loader.load( './assets/hdr/venice_sunset_1k.hdr', ( texture ) => {
-          const envMap = pmremGenerator.fromEquirectangular( texture ).texture;
-          pmremGenerator.dispose();
+    const loader = new RGBELoader().setDataType(THREE.UnsignedByteType);
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    pmremGenerator.compileEquirectangularShader();
 
-          self.scene.environment = envMap;
+    const self = this;
 
-        }, undefined, (err)=>{
-            console.error( 'An error occurred setting the environment');
-        } );
-    }
+    loader.load('./assets/hdr/venice_sunset_1k.hdr', (texture) => {
+        const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        pmremGenerator.dispose();
+
+        self.scene.environment = envMap;
+        self.scene.background = envMap;
+
+        texture.dispose();
+        console.log("🌌 HDRI loaded and set as background.");
+    }, undefined, (err) => {
+        console.error('❌ Failed to load HDRI:', err);
+        self.scene.background = new THREE.Color(0x808080); // fallback if HDR fails
+    });
+}
+
     
     resize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
