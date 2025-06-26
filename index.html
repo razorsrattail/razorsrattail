@@ -16,6 +16,20 @@
 </head>
 <body>
 
+	<!-- 🎬 Video Background -->
+	<video id="bgVideo" autoplay loop playsinline style="
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		min-width: 100%;
+		min-height: 100%;
+		z-index: -1;
+		object-fit: cover;
+	">
+		<source src="./assets/video/bg_video_breaking_bad.mp4" type="video/mp4" />
+		Your browser does not support the video tag.
+	</video>
+
 	<!-- ✅ Start Button UI -->
 	<button id="startButton" style="position: absolute; top: 50%; left: 50%;
 		transform: translate(-50%, -50%); font-size: 24px; padding: 10px 20px; z-index: 10;">
@@ -29,20 +43,26 @@
 		let app;
 
 		document.getElementById('startButton').addEventListener('click', () => {
-	document.getElementById('startButton').style.display = 'none';
+			document.getElementById('startButton').style.display = 'none';
 
-	app = new App();
-	app.playBackgroundMusic(); // ✅ Called immediately after new App()
+			const video = document.getElementById('bgVideo');
+			video.muted = false;
+			video.volume = 1.0;
+			video.play().then(() => {
+				console.log("🎬 Video playing with audio");
+			}).catch((e) => {
+				console.error("❌ Video play error:", e);
+			});
 
+			app = new App();
+			app.playBackgroundMusic(); // ✅ Called immediately after new App()
 
-	// Wait a bit to ensure audio is ready
-	setTimeout(() => {
-		if (app.sound && !app.sound.isPlaying) {
-			app.sound.play();
-		}
-	}, 500);
-});
-
+			setTimeout(() => {
+				if (app.sound && !app.sound.isPlaying) {
+					app.sound.play();
+				}
+			}, 500);
+		});
 	</script>
 
 </body>
