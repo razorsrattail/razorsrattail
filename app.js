@@ -67,7 +67,7 @@ class App {
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('./assets/hdr/venice_sunset_1k.hdr', (texture) => {
+		loader.load('./assets/hdr/bambanani_sunset_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			pmremGenerator.dispose();
 			this.scene.environment = envMap;
@@ -130,7 +130,7 @@ this.loadExtraModel(
 // JESSE PINKMAN — smaller and rotated a bit
 this.loadExtraModel(
   'JESSE PINKMAN.glb',
-  new THREE.Vector3(8, 0, -12),
+  new THREE.Vector3(2, 0, 9),
   { x: 0, y: Math.PI / 2, z: 0 },
   { x: 1.5, y: 1.5, z: 1.5 }
 );
@@ -138,7 +138,7 @@ this.loadExtraModel(
 // WALTER WHITE — smaller and rotated slightly differently
 this.loadExtraModel(
   'WALTER WHITE.glb',
-  new THREE.Vector3(10, 0, -12),
+  new THREE.Vector3(2, 0, 9),
   { x: 0, y: -Math.PI / 4, z: 0 },
   { x: 1.4, y: 1.4, z: 1.4 }
 );
