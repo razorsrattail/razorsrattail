@@ -119,9 +119,29 @@ class App {
 			});
 
 			// Add Breaking Bad models
-this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI, new THREE.Vector3(3, 3, 3));
-this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0, 9), Math.PI / 2, new THREE.Vector3(1.5, 1.5, 1.5));
-this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(2, 0, 9), -Math.PI / 2, new THREE.Vector3(1.5, 1.5, 1.5));
+// BREAKING BAD RV — scale 3x, rotate 180° (facing backwards)
+this.loadExtraModel(
+  'BREAKING BAD RV.glb',
+  new THREE.Vector3(5, 0, -10),
+  { x: 0, y: Math.PI, z: 0 },
+  { x: 3, y: 3, z: 3 }
+);
+
+// JESSE PINKMAN — smaller and rotated a bit
+this.loadExtraModel(
+  'JESSE PINKMAN.glb',
+  new THREE.Vector3(8, 0, -12),
+  { x: 0, y: Math.PI / 2, z: 0 },
+  { x: 1.5, y: 1.5, z: 1.5 }
+);
+
+// WALTER WHITE — smaller and rotated slightly differently
+this.loadExtraModel(
+  'WALTER WHITE.glb',
+  new THREE.Vector3(10, 0, -12),
+  { x: 0, y: -Math.PI / 4, z: 0 },
+  { x: 1.4, y: 1.4, z: 1.4 }
+);
 
 this.loadingBar.visible = false;
 this.setupXR();
@@ -132,13 +152,13 @@ this.setupXR();
 });
 }
 
-loadExtraModel(filename, position, rotationY = 0, scale = new THREE.Vector3(2, 2, 2)) {
+loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x: 2, y: 2, z: 2 }) {
 	const loader = new GLTFLoader().setPath(this.assetsPath);
 	loader.load(filename, (gltf) => {
 		const model = gltf.scene;
 		model.position.copy(position);
-		model.rotation.y = rotationY;           // ← 🔁 this sets rotation around Y-axis
-		model.scale.copy(scale);                // ← 📏 this sets the 3D scale
+		model.rotation.set(rotation.x, rotation.y, rotation.z);
+		model.scale.set(scale.x, scale.y, scale.z);
 		this.scene.add(model);
 	}, undefined, (err) => {
 		console.error(`❌ Failed to load ${filename}`, err);
