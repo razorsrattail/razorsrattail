@@ -149,38 +149,36 @@ class App{
                 self.loadingBar.visible = false;
 			
                 self.setupXR();
-				// Add Breaking Bad models with animation support
-const mixers = [];
+				// Animation mixers array
+self.mixers = [];
 
-const loadExtraModel = (filename, position, rotationY = 0, scale = 3) => {
+const loadExtraModel = (filename, position, rotationY = 0) => {
     const loader = new GLTFLoader().setPath(self.assetsPath);
     loader.load(filename, (gltf) => {
         const model = gltf.scene;
         model.position.copy(position);
         model.rotation.y = rotationY;
-        model.scale.set(scale, scale, scale);
+        model.scale.set(3, 3, 3); // Adjust scale if needed
         self.scene.add(model);
 
-        // Setup animation if present
+        // If there are animations
         if (gltf.animations && gltf.animations.length > 0) {
-            
+            const mixer = new THREE.AnimationMixer(model);
+            gltf.animations.forEach((clip) => {
+                mixer.clipAction(clip).play();
+            });
+            self.mixers.push(mixer);
         }
-
     }, undefined, (err) => {
         console.error(`❌ Failed to load ${filename}`, err);
     });
 };
 
-// Add RV
+// Add Breaking Bad characters
 loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
-
-// Add Jesse Pinkman
 loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
-
-// Add Walter White
 loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
 
-	}
     
     setupXR(){
         this.renderer.xr.enabled = true;
@@ -345,7 +343,9 @@ loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
 
 	render( timestamp, frame ){
         const dt = this.clock.getDelta();
-        mixers.forEach(mixer => mixer.update(dt));
+        if (this.mixers && this.mixers.length > 0) {
+    this.mixers.forEach(mixer => mixer.update(dt));
+}
         if (this.renderer.xr.isPresenting){
             let moveGaze = false;
         
