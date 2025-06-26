@@ -32,6 +32,9 @@
 	document.getElementById('startButton').style.display = 'none';
 
 	app = new App();
+	app.playBackgroundMusic(); // ✅ Called immediately after new App()
+});
+
 
 	// Wait a bit to ensure audio is ready
 	setTimeout(() => {
