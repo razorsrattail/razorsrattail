@@ -37,7 +37,7 @@ class LoadingBar {
 
 		// Optional: Loading text
 		const text = document.createElement("div");
-		text.innerText = "Loading Breaking Bad Experience...";
+		text.innerText = "Loading Experience...";
 		text.style.color = "#00ffcc";
 		text.style.marginTop = "20px";
 		text.style.fontSize = "18px";
