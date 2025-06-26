@@ -13,11 +13,30 @@
 		canvas {
 			display: block;
 		}
+		#startButton, #musicToggle {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 20px;
+			padding: 12px 24px;
+			border-radius: 8px;
+			cursor: pointer;
+			z-index: 10;
+			background-color: #111111;
+			color: #00ffcc;
+			border: 2px solid #00ffcc;
+		}
+		#startButton {
+			top: 50%;
+		}
+		#musicToggle {
+			top: calc(50% + 70px);
+		}
 	</style>
 </head>
 <body>
 
-	<!-- 🎬 Background Video -->
+	<!-- 🎬 Video Background -->
 	<video id="bgVideo" autoplay muted loop playsinline style="
 		position: fixed;
 		right: 0;
@@ -31,54 +50,52 @@
 		Your browser does not support the video tag.
 	</video>
 
-	<!-- 🚀 Start Button -->
-	<button id="startButton" style="
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-size: 24px;
-		padding: 15px 30px;
-		background-color: #111111;
-		color: #00ffcc;
-		font-family: 'Courier New', monospace;
-		border: 2px solid #00ffcc;
-		border-radius: 10px;
-		cursor: pointer;
-		z-index: 10;
-	">
-		Start Experience
-	</button>
+	<!-- ✅ UI Buttons -->
+	<button id="startButton">Start Experience</button>
+	<button id="musicToggle">🔇 Turn Music On</button>
 
-	<!-- ✅ Main App Script -->
+	<!-- ✅ Script -->
 	<script type="module">
 		import { App } from './app.js';
 
 		let app;
+		let musicEnabled = false;
 
-		const startButton = document.getElementById('startButton');
-		const bgVideo = document.getElementById('bgVideo');
+		// Preload music
+		const audio = new Audio('./assets/breaking_bad_main_theme.mp3');
+		audio.loop = true;
+		audio.volume = 1.0;
 
-		startButton.addEventListener('click', () => {
-			// Hide button and stop video
-			startButton.style.display = 'none';
-			bgVideo.pause();
-			bgVideo.currentTime = 0;
-			bgVideo.style.display = 'none';
+		// Toggle music button logic
+		const musicBtn = document.getElementById('musicToggle');
+		musicBtn.addEventListener('click', () => {
+			if (musicEnabled) {
+				audio.pause();
+				musicEnabled = false;
+				musicBtn.textContent = '🔇 Turn Music On';
+			} else {
+				audio.play().then(() => {
+					musicEnabled = true;
+					musicBtn.textContent = '🔊 Turn Music Off';
+				}).catch((err) => {
+					console.error("❌ Music play failed:", err);
+				});
+			}
+		});
 
-			// Launch app
+		// Start experience button
+		document.getElementById('startButton').addEventListener('click', () => {
+			document.getElementById('startButton').style.display = 'none';
+			musicBtn.style.display = 'none';
+			document.getElementById('bgVideo').style.display = 'none';
+
 			app = new App();
 
-			// Attempt to play music (if loaded in app.js)
-			setTimeout(() => {
-				if (app.sound && !app.sound.isPlaying) {
-					app.sound.play().catch((e) => {
-						console.warn("⚠️ Autoplay prevented by browser", e);
-					});
-				}
-			}, 500);
+			// Optional: play music again when entering scene
+			if (musicEnabled && audio.paused) {
+				audio.play();
+			}
 		});
 	</script>
-
 </body>
 </html>
