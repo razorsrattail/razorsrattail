@@ -79,7 +79,6 @@ class App {
 		});
 	}
 
-
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
@@ -120,25 +119,9 @@ class App {
 			});
 
 			// Add Breaking Bad models
-			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -18), Math.PI);
-			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0,  13));
-			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(4, 0, 13));
-loadExtraModel(filename, position, rotationY = 0) {
-	const loader = new GLTFLoader().setPath(this.assetsPath);
-	loader.load(filename, (gltf) => {
-		const model = gltf.scene;
-		model.position.copy(position);
-		model.rotation.y = rotationY;
-		
-		// 👇 This is the scaling line:
-		model.scale.set(1, 1, 1);  // <--- 🔥 Edit this line to scale your characters down
-
-		this.scene.add(model);
-	}, undefined, (err) => {
-		console.error(`❌ Failed to load ${filename}`, err);
-	});
-}
-
+			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
+			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
+			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
 
 			this.loadingBar.visible = false;
 			this.setupXR();
