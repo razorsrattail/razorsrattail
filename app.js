@@ -27,6 +27,8 @@ class App {
 		this.scene = new THREE.Scene();
 this.mixers = [];
 this.scene.add(this.dolly);
+this.playBackgroundMusic();
+
 
 		const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
 		this.scene.add(ambient);
@@ -80,6 +82,22 @@ this.scene.add(this.dolly);
 		});
 	}
 
+playBackgroundMusic() {
+	const listener = new THREE.AudioListener();
+	this.camera.add(listener);
+
+	this.sound = new THREE.Audio(listener);
+	const audioLoader = new THREE.AudioLoader();
+
+	audioLoader.load('./assets/audio/Breaking Bad Main Title Theme (Extended).mp3', (buffer) => {
+		this.sound.setBuffer(buffer);
+		this.sound.setLoop(true);
+		this.sound.setVolume(1.0);
+		console.log("🎵 Music loaded");
+	}, undefined, (err) => {
+		console.error("❌ Failed to load audio", err);
+	});
+}
 
 	resize() {
 		this.camera.aspect = window.innerWidth / window.innerHeight;
