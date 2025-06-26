@@ -293,29 +293,50 @@ loadExtraModel(filename, position, rotation = { x: 0, y: 0, z: 0 }, scale = { x:
 	}
 
 	render(timestamp, frame) {
-		const dt = this.clock.getDelta();
+	const dt = this.clock.getDelta();
 
-		if (this.renderer.xr.isPresenting) {
-			let moveGaze = false;
-			if (this.useGaze && this.gazeController) {
-				this.gazeController.update();
-				moveGaze = (this.gazeController.mode === GazeController.Modes.MOVE);
-			}
-			if (this.selectPressed || moveGaze) {
-				this.moveDolly(dt);
-				if (this.boardData) {
-					const dollyPos = this.dolly.getWorldPosition(new THREE.Vector3());
-					let found = false;
-					Object.entries(this.boardData).forEach(([name, info]) => {
-						const obj = this.scene.getObjectByName(name);
-						if (obj) {
-							const pos = obj.getWorldPosition(new THREE.Vector3());
-							if (dollyPos.distanceTo(pos) < 3) {
-								found = true;
-								if (this.boardShown !== name) this.showInfoboard(name, info, pos);
-							}
+	if (this.renderer.xr.isPresenting) {
+		let moveGaze = false;
+		if (this.useGaze && this.gazeController) {
+			this.gazeController.update();
+			moveGaze = (this.gazeController.mode === GazeController.Modes.MOVE);
+		}
+		if (this.selectPressed || moveGaze) {
+			this.moveDolly(dt);
+			if (this.boardData) {
+				const dollyPos = this.dolly.getWorldPosition(new THREE.Vector3());
+				let found = false;
+				Object.entries(this.boardData).forEach(([name, info]) => {
+					const obj = this.scene.getObjectByName(name);
+					if (obj) {
+						const pos = obj.getWorldPosition(new THREE.Vector3());
+						if (dollyPos.distanceTo(pos) < 3) {
+							found = true;
+							if (this.boardShown !== name) this.showInfoboard(name, info, pos);
 						}
-					});
+					}
+				});
+				if (!found) {
+					this.boardShown = "";
+					this.ui.visible = false;
+				}
+			}
+		}
+	}
+
+	if (this.immersive !== this.renderer.xr.isPresenting) {
+		this.resize();
+		this.immersive = this.renderer.xr.isPresenting;
+	}
+
+	// ✅ Play animations
+	if (this.mixers && this.mixers.length > 0) {
+		this.mixers.forEach(mixer => mixer.update(dt));
+	}
+
+	this.stats.update();
+	this.renderer.render(this.scene, this.camera);
+}
 
 
 					if (!found) {
