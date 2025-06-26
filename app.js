@@ -149,6 +149,29 @@ class App{
                 self.loadingBar.visible = false;
 			
                 self.setupXR();
+				// Add Breaking Bad models
+const loadExtraModel = (filename, position, rotationY = 0) => {
+    const loader = new GLTFLoader().setPath(self.assetsPath);
+    loader.load(filename, (gltf) => {
+        const model = gltf.scene;
+        model.position.copy(position);
+        model.rotation.y = rotationY;
+        model.scale.set(1, 1, 1); // Adjust if needed
+        self.scene.add(model);
+    }, undefined, (err) => {
+        console.error(`❌ Failed to load ${filename}`, err);
+    });
+};
+
+// Add RV
+loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
+
+// Add Jesse Pinkman
+loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
+
+// Add Walter White
+loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
+
 			},
 			// called while loading is progressing
 			function ( xhr ) {
