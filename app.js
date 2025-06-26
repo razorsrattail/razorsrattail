@@ -119,31 +119,32 @@ class App {
 			});
 
 			// Add Breaking Bad models
-			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
-			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0, 9));
-			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(2, 0, 9));
+this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI, new THREE.Vector3(3, 3, 3));
+this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0, 9), Math.PI / 2, new THREE.Vector3(1.5, 1.5, 1.5));
+this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(2, 0, 9), -Math.PI / 2, new THREE.Vector3(1.5, 1.5, 1.5));
 
-			this.loadingBar.visible = false;
-			this.setupXR();
-		}, xhr => {
-			this.loadingBar.progress = xhr.loaded / xhr.total;
-		}, err => {
-			console.error('❌ Error loading college.glb:', err);
-		});
-	}
+this.loadingBar.visible = false;
+this.setupXR();
+}, xhr => {
+	this.loadingBar.progress = xhr.loaded / xhr.total;
+}, err => {
+	console.error('❌ Error loading college.glb:', err);
+});
+}
 
-	loadExtraModel(filename, position, rotationY = 0) {
-		const loader = new GLTFLoader().setPath(this.assetsPath);
-		loader.load(filename, (gltf) => {
-			const model = gltf.scene;
-			model.position.copy(position);
-			model.rotation.y = rotationY;
-			model.scale.set(1, 1, 1);
-			this.scene.add(model);
-		}, undefined, (err) => {
-			console.error(`❌ Failed to load ${filename}`, err);
-		});
-	}
+loadExtraModel(filename, position, rotationY = 0, scale = new THREE.Vector3(2, 2, 2)) {
+	const loader = new GLTFLoader().setPath(this.assetsPath);
+	loader.load(filename, (gltf) => {
+		const model = gltf.scene;
+		model.position.copy(position);
+		model.rotation.y = rotationY;           // ← 🔁 this sets rotation around Y-axis
+		model.scale.copy(scale);                // ← 📏 this sets the 3D scale
+		this.scene.add(model);
+	}, undefined, (err) => {
+		console.error(`❌ Failed to load ${filename}`, err);
+	});
+}
+
 
 	setupXR() {
 		this.renderer.xr.enabled = true;
