@@ -67,7 +67,7 @@ class App {
 		const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 		pmremGenerator.compileEquirectangularShader();
 
-		loader.load('./assets/hdr/bambanani_sunset_1k.hdr', (texture) => {
+		loader.load('./assets/hdr/venice_sunset_1k.hdr', (texture) => {
 			const envMap = pmremGenerator.fromEquirectangular(texture).texture;
 			pmremGenerator.dispose();
 			this.scene.environment = envMap;
@@ -118,12 +118,10 @@ class App {
 				}
 			});
 
-			// Normal size for RV
-this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -18), Math.PI);
-
-// Smaller Jesse and Walter
-this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(2, 0, 9), 0, new THREE.Vector3(1.5, 1.5, 1.5));
-this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(4, 0, 9), 0, new THREE.Vector3(1.5, 1.5, 1.5));
+			// Add Breaking Bad models
+			this.loadExtraModel('BREAKING BAD RV.glb', new THREE.Vector3(5, 0, -10), Math.PI);
+			this.loadExtraModel('JESSE PINKMAN.glb', new THREE.Vector3(8, 0, -12));
+			this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(10, 0, -12));
 
 			this.loadingBar.visible = false;
 			this.setupXR();
@@ -134,19 +132,18 @@ this.loadExtraModel('WALTER WHITE.glb', new THREE.Vector3(4, 0, 9), 0, new THREE
 		});
 	}
 
-
-	loadExtraModel(filename, position, rotationY = 0, scale = new THREE.Vector3(3, 3, 3)) {
-	const loader = new GLTFLoader().setPath(this.assetsPath);
-	loader.load(filename, (gltf) => {
-		const model = gltf.scene;
-		model.position.copy(position);
-		model.rotation.y = rotationY;
-		model.scale.copy(scale); // ← Now you can control scale per model
-		this.scene.add(model);
-	}, undefined, (err) => {
-		console.error(`❌ Failed to load ${filename}`, err);
-	});
-}
+	loadExtraModel(filename, position, rotationY = 0) {
+		const loader = new GLTFLoader().setPath(this.assetsPath);
+		loader.load(filename, (gltf) => {
+			const model = gltf.scene;
+			model.position.copy(position);
+			model.rotation.y = rotationY;
+			model.scale.set(3, 3, 3);
+			this.scene.add(model);
+		}, undefined, (err) => {
+			console.error(`❌ Failed to load ${filename}`, err);
+		});
+	}
 
 	setupXR() {
 		this.renderer.xr.enabled = true;
